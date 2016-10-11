@@ -13,7 +13,7 @@ namespace ScatCardGame
            
         }
 
-        public void drawPileInit()
+        public void init()
         {
             for (int suit = 0; suit < 4; suit++)
             {

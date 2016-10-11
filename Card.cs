@@ -44,7 +44,7 @@ namespace ScatCardGame
 
         public string getCardInfo()
         {
-            string cardInfo = String.Format("{0} of {1}", suit, rank);
+            string cardInfo = String.Format("{0} of {1}", rank, suit);
             return cardInfo;
         }
 
