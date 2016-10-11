@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace ScatCardGame
 {
@@ -10,28 +11,22 @@ namespace ScatCardGame
     {
         static void Main(string[] args)
         {
+            const int MAX_CARDS_IN_HAND = 3;
+            const int NUM_OF_PLAYERS = 2;
+
             DrawPile drawPile = new DrawPile();
             CardPile discardPile = new CardPile();
+            Collection<Hand> playersHands = new Collection<Hand>();
 
-            Console.WriteLine("The first card on the draw pile is: {0}", drawPile.viewTopCard().getCardInfo());
-            discardPile.putCard(drawPile.drawCard());
-            Console.WriteLine("The first card on the draw pile is: {0}", drawPile.viewTopCard().getCardInfo());
-            Console.WriteLine("The first card on the discard pile is: {0}", discardPile.viewTopCard().getCardInfo());
-            Console.ReadLine();
+            drawPile.drawPileInit();
+            drawPile.shuffle();
 
-            int hearts = 0;
-            int diamonds = 1;
-
-            Card firstCard = new Card(hearts, 6);
-            Card secondCard = new Card(diamonds, 9);
-            Card thirdCard = new Card(hearts, 8);
-
-            Hand hand = new Hand();
-
-            hand.handInit();
-            hand.addCard(firstCard);
-            hand.addCard(secondCard);
-            hand.addCard(thirdCard);
+            //deal cards
+            for (int player = 0; player <= NUM_OF_PLAYERS; player++)
+            {
+                for (int i = 0; i < MAX_CARDS_IN_HAND; i++)
+                    playersHands[player].addCard(drawPile.drawCard());                    
+            } 
 
             Console.ReadLine();
         }
