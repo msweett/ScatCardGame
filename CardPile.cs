@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScatCardGame
 {
-    class CardPile
+    public class CardPile
     {
         public Stack<Card> cardPile = new Stack<Card>();
 

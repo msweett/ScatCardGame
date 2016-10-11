@@ -10,7 +10,6 @@ namespace ScatCardGame
     {
         static void Main(string[] args)
         {
-            /*
             DrawPile drawPile = new DrawPile();
             CardPile discardPile = new CardPile();
 
@@ -19,7 +18,6 @@ namespace ScatCardGame
             Console.WriteLine("The first card on the draw pile is: {0}", drawPile.viewTopCard().getCardInfo());
             Console.WriteLine("The first card on the discard pile is: {0}", discardPile.viewTopCard().getCardInfo());
             Console.ReadLine();
-            */
 
             int hearts = 0;
             int diamonds = 1;
