@@ -22,9 +22,9 @@ namespace ScatCardGame
                 this.suit = suit;
             }
 
-            if (rank > 12 || rank < 0)
+            if (rank > 13 || rank < 1)
             {
-                throw new System.ArgumentOutOfRangeException("Card rank is invalid, please chose a number between 0 and 12");
+                throw new System.ArgumentOutOfRangeException("Card rank is invalid, please chose a number between 1 and 13");
             }
             else
             {
@@ -44,9 +44,19 @@ namespace ScatCardGame
 
         public string getCardInfo()
         {
-            string cardInfo = String.Format("{0} of {1}", rank, suit);
+            string suitName;
+
+            switch (suit)
+            {
+                case 0: suitName = "Hearts"; break;
+                case 1: suitName = "Diamonds"; break;
+                case 2: suitName = "Clubs"; break;
+                case 3: suitName = "Spades"; break;
+                default:suitName = "Error"; break;
+            }
+
+            string cardInfo = String.Format("{0} of {1}", rank, suitName);
             return cardInfo;
         }
-
     }
 }

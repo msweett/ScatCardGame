@@ -15,9 +15,10 @@ namespace ScatCardGame
 
         public void init()
         {
+            cardPile.Clear();
             for (int suit = 0; suit < 4; suit++)
             {
-                for (int rank = 0; rank < 13; rank++)
+                for (int rank = 1; rank <= 13; rank++)
                 {
                     Card c = new Card(suit, rank);
                     cardPile.Push(c);

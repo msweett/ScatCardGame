@@ -9,7 +9,7 @@ namespace ScatCardGame
     public class Hand
     {
         public Dictionary<int, int> calculatedValue = new Dictionary<int, int>();
-        public HashSet<Card> cards = new HashSet<Card>();
+        public List<Card> cards = new List<Card>();
         public int winningHandValue = 31;
 
         public Hand()
@@ -41,7 +41,7 @@ namespace ScatCardGame
         {
             Boolean isWinner = false;
 
-            for (int suit = 0; suit < 3; suit++)
+            for (int suit = 0; suit <= 3; suit++)
             {
                 if (calculatedValue[suit] == winningHandValue)
                 {

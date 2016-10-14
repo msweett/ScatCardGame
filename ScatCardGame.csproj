@@ -47,6 +47,7 @@
     <Compile Include="CardPile.cs" />
     <Compile Include="DrawPile.cs" />
     <Compile Include="Hand.cs" />
+    <Compile Include="PlayersHands.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
