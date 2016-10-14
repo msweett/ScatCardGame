@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace ScatCardGame
 {
-    class PlayersHands : Hand
+    public class PlayersHands : Hand
     {
         public Collection<Hand> playersHands = new Collection<Hand>();
         public int NUM_OF_PLAYERS, MAX_CARDS_IN_HAND;
