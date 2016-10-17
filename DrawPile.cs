@@ -15,13 +15,14 @@ namespace ScatCardGame
 
         public void init()
         {
-            cardPile.Clear();
+            clearCardPile();
+
             for (int suit = 0; suit < 4; suit++)
             {
                 for (int rank = 1; rank <= 13; rank++)
                 {
                     Card c = new Card(suit, rank);
-                    cardPile.Push(c);
+                    putCard(c);
                 }
             }
         }
@@ -30,10 +31,10 @@ namespace ScatCardGame
         {
             Random rnd = new Random();
             var values = cardPile.ToArray();
-            cardPile.Clear();
+            clearCardPile();
 
             foreach (var value in values.OrderBy(x => rnd.Next()))
-                cardPile.Push(value);
+                putCard(value);
         }
     }
 }

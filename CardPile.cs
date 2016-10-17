@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScatCardGame
 {
     public class CardPile
     {
-        public Stack<Card> cardPile = new Stack<Card>();
+        protected Stack<Card> cardPile = new Stack<Card>();
 
         public CardPile()
         {
@@ -28,6 +25,16 @@ namespace ScatCardGame
         public Card viewTopCard()
         {
             return cardPile.Peek();
+        }
+
+        public Boolean containsCard(Card card)
+        {
+            return cardPile.Contains(card);
+        }
+
+        protected void clearCardPile()
+        {
+            cardPile.Clear();
         }
     }
 }

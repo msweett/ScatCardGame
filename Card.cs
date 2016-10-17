@@ -8,55 +8,45 @@ namespace ScatCardGame
 {
     public class Card
     {
-        private int rank;
-        private int suit;
+       private int rank;
+       private int suit;
 
-        public Card(int suit, int rank)
+        public Card(int newSuit, int newRank)
         {
-            if (suit > 3 || suit < 0)
+            if (newSuit > 3 || newSuit < 0)
             {
                 throw new System.ArgumentOutOfRangeException("Card suit is invalid, please chose a number between 0 and 3");
             }
             else
             {
-                this.suit = suit;
+                Suit = newSuit;
             }
 
-            if (rank > 13 || rank < 1)
+            if (newRank > 13 || newRank < 1)
             {
                 throw new System.ArgumentOutOfRangeException("Card rank is invalid, please chose a number between 1 and 13");
             }
             else
             {
-                this.rank = rank;
+                Rank = newRank;
             } 
         }
 
-        public int getRank()
+        public int Rank
         {
-            return rank;
+            get{ return rank; }
+            set{ rank = value; }
         }
 
-        public int getSuit()
+        public int Suit
         {
-            return suit;
+            get { return suit; }
+            set { suit = value; }
         }
 
         public string getCardInfo()
         {
-            string suitName;
-
-            switch (suit)
-            {
-                case 0: suitName = "Hearts"; break;
-                case 1: suitName = "Diamonds"; break;
-                case 2: suitName = "Clubs"; break;
-                case 3: suitName = "Spades"; break;
-                default:suitName = "Error"; break;
-            }
-
-            string cardInfo = String.Format("{0} of {1}", rank, suitName);
-            return cardInfo;
+            return String.Format("{0} of {1}", rank, Globals.suitNames[suit]);
         }
     }
 }

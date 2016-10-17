@@ -1,29 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
 namespace ScatCardGame
 {
     public class PlayersHands : Hand
     {
-        public Collection<Hand> playersHands = new Collection<Hand>();
-        public int NUM_OF_PLAYERS, MAX_CARDS_IN_HAND;
+        private Collection<Hand> playersHands = new Collection<Hand>();
 
-        public PlayersHands(int numOfPlayers, int maxCardsInHand)
+        public PlayersHands(int numOfPlayers)
         {
-            NUM_OF_PLAYERS = numOfPlayers;
-            MAX_CARDS_IN_HAND = maxCardsInHand;
-        }
-
-        public void init()
-        {
-            for (int player = 0; player < NUM_OF_PLAYERS; player++)
+            for (int player = 0; player < numOfPlayers; player++)
             {
                 playersHands.Add(new Hand());
-                playersHands[player].handInit();   
             }
         }
 
@@ -36,5 +24,11 @@ namespace ScatCardGame
         {
             return playersHands[playerIndex];          
         }
+
+        public int countCards()
+        {
+            return playersHands.Count;
+        }
+
     }
 }

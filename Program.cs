@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 
 namespace ScatCardGame
 {
+    public static class Globals
+    {
+        public static List<String> suitNames = new List<String> { "Hearts", "Diamonds", "Clubs", "Spades" };
+    }
+
     class Program
     {
         static void Main(string[] args)
-        {
-            
+        {   
             const int NUM_OF_PLAYERS    = 2;
             const int MAX_CARDS_IN_HAND = 3;
            
@@ -21,11 +21,10 @@ namespace ScatCardGame
 
             DrawPile drawPile               = new DrawPile();
             CardPile discardPile            = new CardPile();
-            PlayersHands playersHands       = new PlayersHands(NUM_OF_PLAYERS, MAX_CARDS_IN_HAND);
+            PlayersHands playersHands       = new PlayersHands(NUM_OF_PLAYERS);
 
             drawPile.init();
             drawPile.shuffle();
-            playersHands.init();
 
             for (int playerIndex = 0; playerIndex < NUM_OF_PLAYERS; playerIndex++)
                 for (int j = 0; j < MAX_CARDS_IN_HAND; j++)
@@ -40,8 +39,8 @@ namespace ScatCardGame
                 {
                     Hand playerHand = playersHands.getPlayerHand(player);
                     int playerDisplayNumber = player + 1;
-                    
-                    displayCardsInHand(playerHand, playerDisplayNumber);
+
+                    playerHand.toString(playerDisplayNumber);
 
                     Console.Write("\n(d) Draw a card\t(p) pick the {0} from the discard pile", discardPile.viewTopCard().getCardInfo());
                               
@@ -60,30 +59,31 @@ namespace ScatCardGame
                                 break;
                             default:
                                 validInput = false;
-                                Console.WriteLine("Invalid Selection, try again");
+                                Console.WriteLine("\nInvalid Selection, try again");
                                 break;
                         }
                     } while (!validInput);
 
                     
-                    displayCardsInHand(playerHand, playerDisplayNumber);
+                    playerHand.toString(playerDisplayNumber);
 
                     int indexOfCardToDiscard = discardCardInput();
 
-                    Card cardToRemove = playerHand.cards[indexOfCardToDiscard];
-                    discardPile.putCard(cardToRemove);
+                    Card cardToRemove = playerHand.findCard(indexOfCardToDiscard);
                     playerHand.removeCard(cardToRemove);
+                    discardPile.putCard(cardToRemove);
+                   
 
                     Console.WriteLine("\n{0} has been discarded\n", cardToRemove.getCardInfo());
 
-                    displaySuitStatus(playerHand);
+                    playerHand.displaySuitValues();
 
                     isWinningHand = playerHand.isWinner();
 
                     if (isWinningHand)
                     {
                         Console.WriteLine("\nThe cake is a lie.");
-                        player = NUM_OF_PLAYERS;    //so we don't go to the next turn and clear isWinningHand
+                        player = NUM_OF_PLAYERS;    //so we don't go to the next turn and reset isWinningHand
                     }
                     else
                     {
@@ -94,33 +94,6 @@ namespace ScatCardGame
                     Console.Clear();
                 }
             }
-        }
-
-        public static void displayCardsInHand(Hand playersHand, int player)
-        {
-            int selection = 0;
-
-            Console.Clear();
-            Console.WriteLine("Player {0} turn", player);
-            Console.WriteLine("Your cards are: \n");
-
-            foreach (Card card in playersHand.cards)
-            {
-                Console.WriteLine("({0}) {1}",selection, card.getCardInfo());
-                selection++;
-            }
-        }
-
-        public static List<String> suitMapInit()
-        {
-            List<String> suitMap = new List<String>();
-
-            suitMap.Add("Hearts");
-            suitMap.Add("Diamonds");
-            suitMap.Add("Clubs");
-            suitMap.Add("Spades");
-
-            return suitMap;
         }
 
         public static int discardCardInput()
@@ -137,16 +110,6 @@ namespace ScatCardGame
             } while (inputAsInt< 0 || inputAsInt >= 4);
 
             return inputAsInt;
-        }
-
-        public static void displaySuitStatus(Hand playerHand)
-        {
-            List<String> suitMap = suitMapInit();
-
-            for (int i = 0; i <= 3; i++)
-            {
-                Console.WriteLine("{0}: {1}", suitMap[i], playerHand.calculatedValue[i]);
-            }
         }
     }
 }
