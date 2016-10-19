@@ -4,3 +4,6 @@ c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGa
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\obj\Debug\ScatCardGame.csprojResolveAssemblyReference.cache
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\obj\Debug\ScatCardGame.exe
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\obj\Debug\ScatCardGame.pdb
+C:\Users\danwils\Desktop\New folder\ScatCardGame\bin\Debug\ScatCardGame.exe.config
+C:\Users\danwils\Desktop\New folder\ScatCardGame\obj\Debug\ScatCardGame.exe
+C:\Users\danwils\Desktop\New folder\ScatCardGame\obj\Debug\ScatCardGame.pdb
