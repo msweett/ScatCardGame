@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,76 +9,67 @@ namespace ScatCardGame
 {
     public class Hand
     {
-        private Dictionary<int, int> calculatedValue = new Dictionary<int, int>();
+        private HandValue handValue = new HandValue();
         private List<Card> cards = new List<Card>();
-        private int winningHandValue = 31;
 
         public Hand()
         {
-            calculatedValue.Add(0, 0);   //hearts
-            calculatedValue.Add(1, 0);   //diamonds
-            calculatedValue.Add(2, 0);   //clubs
-            calculatedValue.Add(3, 0);   //spades
+
         }
 
         public void addCard(Card card)
         {
             cards.Add(card);
-            calculatedValue[card.Suit] += card.Rank;
+            handValue.calculateHandValue(this);
         }
 
         public void removeCard(Card card)
         {
             cards.Remove(card);
-            calculatedValue[card.Suit] -= card.Rank;
+            handValue.calculateHandValue(this);
         }
 
         public Boolean isWinner()
         {
-            Boolean isWinner = false;
+            return handValue.isWinner(this);
+        }
+        
+        public Boolean isValidWinningHand()
+        {
+            Boolean validWinningHand = false;
 
-            for (int suit = 0; suit <= 3; suit++)
+            if (countCards() == 3)
             {
-                if (calculatedValue[suit] == winningHandValue)
-                {
-                    isWinner = true;
-                }
+                validWinningHand = true;
             }
 
-            return isWinner;
+            return validWinningHand;
         }
 
-        public void toString(int playerIndex)
+        public string toString()
         {
             int selection = 0;
-
-            Console.Clear();
-            Console.WriteLine("Player {0} turn", playerIndex);
-            Console.WriteLine("Your cards are: \n");
+            string handInfo = "";
 
             foreach (Card card in cards)
             {
-                Console.WriteLine("({0}) {1}", selection, card.getCardInfo());
+                handInfo += "(" + selection + ")" + " " + card.getCardInfo() + "\n";
                 selection++;
             }
+            return handInfo;
         }
 
-        public Card findCard(int indexOfCard)
+        public List<Card> getListOfCards()
         {
-            return cards[indexOfCard];
+            return cards;
         }
 
         public void displaySuitValues()
         {
             for (int i = 0; i <= 3; i++)
             {
-                Console.WriteLine("{0}: {1}", Globals.suitNames[i], calculatedValue[i]);
+                Console.WriteLine("{0}: {1}", Globals.suitNames[i], handValue.suitValueFor(i));
             }
-        }
-
-        public int suitValueFor(int index)
-        {
-            return calculatedValue[index];
         }
 
         public Boolean containsCard(Card card)
@@ -85,5 +77,55 @@ namespace ScatCardGame
             return cards.Contains(card);
         }
 
+        public int countCards()
+        {
+            return cards.Count;
+        }
+
+        /*
+        public int highestValuedSuit()
+        {
+            int highestValuedSuit = 0;
+
+            for (int i = 0; i <= 3; i++)
+            {
+                if ((calculatedValue[i] > highestValuedSuit) && ())
+                {
+                    //highestValuedSuit = calculatedValue[i];
+
+                }
+            }
+
+            return highestValuedSuit;
+        }
+        */
+
+        /*
+        private Boolean canSuitWin(int suit)
+        {
+            List<int> ranks = new List<int>();
+
+            foreach (Card card in cards)
+            {
+                if (card.Suit == suit)
+                {
+                    ranks.Add(card.Rank);
+                }
+            }
+
+            int sum = 0;
+            foreach (int i in ranks)
+            {
+                sum += i;
+            }
+
+            Boolean suitCanWin = false;
+            if ((winningHandValue-sum < 13) && (!ranks.Contains(13)))
+            {
+                suitCanWin = true;
+            }
+            return suitCanWin;
+        }
+        */
     }
 }

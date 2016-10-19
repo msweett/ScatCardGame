@@ -12,78 +12,57 @@ namespace ScatCardGame
     {
         static void Main(string[] args)
         {   
-            const int NUM_OF_PLAYERS    = 2;
+            const int NUM_OF_PLAYERS = 2;
             const int MAX_CARDS_IN_HAND = 3;
-           
-            ConsoleKeyInfo userSelection;
-            Boolean validInput      = false;
-            Boolean isWinningHand   = false;
+            const int NUM_OF_AI = 0;
+            
+            Boolean isGameOver   = false;
 
-            DrawPile drawPile               = new DrawPile();
-            CardPile discardPile            = new CardPile();
-            PlayersHands playersHands       = new PlayersHands(NUM_OF_PLAYERS);
+            DrawPile drawPile       = new DrawPile();
+            CardPile discardPile    = new CardPile();
+            Players players         = new Players(NUM_OF_PLAYERS, NUM_OF_AI);
 
             drawPile.init();
             drawPile.shuffle();
 
             for (int playerIndex = 0; playerIndex < NUM_OF_PLAYERS; playerIndex++)
                 for (int j = 0; j < MAX_CARDS_IN_HAND; j++)
-                    playersHands.dealCard(playerIndex, drawPile.drawCard());
+                    players.dealCard(playerIndex, drawPile.drawCard());
             
             discardPile.putCard(drawPile.drawCard());
 
-            //start playing
-            while (!isWinningHand)
+            //start playing!
+            while (!isGameOver)
             {
-                for (int player = 0; player < NUM_OF_PLAYERS; player++)
+                for (int playerIndex = 0; playerIndex < NUM_OF_PLAYERS; playerIndex++)
                 {
-                    Hand playerHand = playersHands.getPlayerHand(player);
-                    int playerDisplayNumber = player + 1;
+                    Player player = players.getPlayer(playerIndex);
+                    Hand playerHand = player.getPlayerHand();
+                    int playerDisplayNumber = playerIndex + 1;
 
-                    playerHand.toString(playerDisplayNumber);
+                    displayPlayerHand(playerDisplayNumber, playerHand);
 
                     Console.Write("\n(d) Draw a card\t(p) pick the {0} from the discard pile", discardPile.viewTopCard().getCardInfo());
-                              
-                    do
-                    {
-                        validInput = true;
-                        userSelection = Console.ReadKey();
-                        
-                        switch (userSelection.KeyChar)
-                        {
-                            case 'd':
-                                playerHand.addCard(drawPile.drawCard());
-                                break;
-                            case 'p':
-                                playerHand.addCard(discardPile.drawCard());
-                                break;
-                            default:
-                                validInput = false;
-                                Console.WriteLine("\nInvalid Selection, try again");
-                                break;
-                        }
-                    } while (!validInput);
 
-                    
-                    playerHand.toString(playerDisplayNumber);
+                    char cardPileToDrawFrom = drawCardInput();
+                    drawCard(cardPileToDrawFrom, ref player, ref discardPile, ref drawPile);
+
+                    displayPlayerHand(playerDisplayNumber, playerHand);
+
+                    Console.Write("Which card would you like to discard: ");
 
                     int indexOfCardToDiscard = discardCardInput();
+                    discarCardFromHand(indexOfCardToDiscard, ref playerHand, ref discardPile);
 
-                    Card cardToRemove = playerHand.findCard(indexOfCardToDiscard);
-                    playerHand.removeCard(cardToRemove);
-                    discardPile.putCard(cardToRemove);
-                   
-
-                    Console.WriteLine("\n{0} has been discarded\n", cardToRemove.getCardInfo());
-
+                    displayPlayerHand(playerDisplayNumber, playerHand);
                     playerHand.displaySuitValues();
 
-                    isWinningHand = playerHand.isWinner();
+                    isGameOver = playerHand.isWinner();
 
-                    if (isWinningHand)
+                    if (isGameOver)
                     {
                         Console.WriteLine("\nThe cake is a lie.");
-                        player = NUM_OF_PLAYERS;    //so we don't go to the next turn and reset isWinningHand
+                        playerIndex = NUM_OF_PLAYERS;    //so we don't go to the next turn and reset isWinningHand
                     }
                     else
                     {
@@ -101,8 +80,6 @@ namespace ScatCardGame
             int inputAsInt;
             ConsoleKeyInfo userSelection;
 
-            Console.Write("\nWhich card would you like to discard: ");
-
             do
             {
                 userSelection = Console.ReadKey();
@@ -110,6 +87,53 @@ namespace ScatCardGame
             } while (inputAsInt< 0 || inputAsInt >= 4);
 
             return inputAsInt;
+        }
+
+        public static char drawCardInput()
+        {
+            char userSelection;
+
+            do
+            {
+                userSelection = Console.ReadKey().KeyChar;
+            } while (userSelection != 'd' && userSelection != 'p');
+
+            return userSelection;
+        }
+
+        public static void drawCard(char cardPileToDrawFrom, ref Player player, ref CardPile cardPile, ref DrawPile drawPile)
+        {
+            if (cardPileToDrawFrom == 'd')
+            {
+                player.getPlayerHand().addCard(drawPile.drawCard());
+            }
+            else if (cardPileToDrawFrom == 'p')
+            {
+                player.getPlayerHand().addCard(cardPile.drawCard());
+            }
+        }
+
+        public static void discarCardFromHand(int indexOfCard, ref Hand hand, ref CardPile discardPile)
+        {
+            Card cardToDiscard = hand.getListOfCards()[indexOfCard];
+
+            hand.removeCard(cardToDiscard);
+            discardPile.putCard(cardToDiscard);
+
+            Console.WriteLine("\n{0} has been discarded\n", cardToDiscard.getCardInfo());
+        }
+
+        public static void printHeaderMessage(int playerDisplayNumber)
+        {
+            Console.Clear();
+            Console.WriteLine("Player {0} turn", playerDisplayNumber);
+            Console.WriteLine("Your cards are: \n");
+        }
+
+        public static void displayPlayerHand(int displayNumber, Hand playerHand)
+        {
+            printHeaderMessage(displayNumber);
+            Console.WriteLine(playerHand.toString());
         }
     }
 }
