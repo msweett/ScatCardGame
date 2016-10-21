@@ -1,6 +1,6 @@
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\bin\Debug\ScatCardGame.exe.config
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\bin\Debug\ScatCardGame.exe
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\bin\Debug\ScatCardGame.pdb
-c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\obj\Debug\ScatCardGame.csprojResolveAssemblyReference.cache
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\obj\Debug\ScatCardGame.exe
 c:\users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\obj\Debug\ScatCardGame.pdb
+C:\Users\matthew_s\documents\visual studio 2015\Projects\ScatCardGame\ScatCardGame\obj\Debug\ScatCardGame.csprojResolveAssemblyReference.cache

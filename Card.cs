@@ -8,45 +8,29 @@ namespace ScatCardGame
 {
     public class Card
     {
-       private int rank;
-       private int suit;
+        public Rank Rank { get; }
+        public Suit Suit { get; }
 
-        public Card(int newSuit, int newRank)
+        public Card(int suit, int rank)
         {
-            if (newSuit > 3 || newSuit < 0)
+            if (!Enum.IsDefined(typeof(Suit), suit))
             {
                 throw new System.ArgumentOutOfRangeException("Card suit is invalid, please chose a number between 0 and 3");
             }
-            else
-            {
-                Suit = newSuit;
-            }
 
-            if (newRank > 13 || newRank < 1)
+            if (!Enum.IsDefined(typeof(Rank), rank))
             {
                 throw new System.ArgumentOutOfRangeException("Card rank is invalid, please chose a number between 1 and 13");
             }
-            else
-            {
-                Rank = newRank;
-            } 
-        }
 
-        public int Rank
-        {
-            get{ return rank; }
-            set{ rank = value; }
-        }
-
-        public int Suit
-        {
-            get { return suit; }
-            set { suit = value; }
+            Suit = (Suit)suit;
+            Rank = (Rank)rank;
         }
 
         public string getCardInfo()
         {
-            return String.Format("{0} of {1}", rank, Globals.suitNames[suit]);
+            return $"{Rank} of {Suit}";//,{rank}, Globals.suitNames[(int)suit]);
         }
     }
 }
+

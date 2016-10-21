@@ -17,7 +17,7 @@ namespace ScatCardGame
         {
             clearCardPile();
 
-            for (int suit = 0; suit < 4; suit++)
+            for (int suit = (int)Suit.Hearts; suit < 4; suit++)
             {
                 for (int rank = 1; rank <= 13; rank++)
                 {

@@ -9,6 +9,7 @@ namespace ScatCardGame
     public class HandValue
     {
         private static int WINNING_HAND_VALUE = 31;
+        private static int MAX_CARDS_IN_HAND = 3;
         private Dictionary<int, int> calculatedValue = new Dictionary<int, int>();
 
         public HandValue()
@@ -19,11 +20,11 @@ namespace ScatCardGame
             calculatedValue.Add(3, 0);   //spades
         }
 
-        public Boolean isWinner(Hand hand)
+        public Boolean isWinner(List<Card> cards)
         {
             Boolean isWinner = false;
 
-            if (hand.isValidWinningHand())
+            if (cards.Count == MAX_CARDS_IN_HAND)
             {
                 for (int suit = 0; suit <= 3; suit++)
                 {
@@ -36,18 +37,17 @@ namespace ScatCardGame
             return isWinner;
         }
 
-        public void calculateHandValue(Hand hand)
+        public void calculateValue(List<Card> cards)
         {
-            List<Card> cards = hand.getListOfCards();
             clearHandValues();
 
             foreach (Card card in cards)
             {
-                calculatedValue[card.Suit] += card.Rank;
+                calculatedValue[(int)card.Suit] += (int)card.Rank;
             }
         }
 
-        public int suitValueFor(int suitIndex)
+        public int suitValue(int suitIndex)
         {
             return calculatedValue[suitIndex];
         }
@@ -59,6 +59,7 @@ namespace ScatCardGame
             calculatedValue[2] = 0;
             calculatedValue[3] = 0;
         }
+
 
         /*
         public int highestValuedSuit()

@@ -25,7 +25,7 @@ namespace ScatCardGame
 
         public void dealCard(int player, Card card)
         {
-            players[player].addCardToHand(card);
+            players[player].addCard(card);
         }
 
         public Player getPlayer(int indexOfPlayer)
