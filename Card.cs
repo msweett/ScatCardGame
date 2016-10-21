@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ScatCardGame
 {
@@ -29,7 +25,7 @@ namespace ScatCardGame
 
         public string getCardInfo()
         {
-            return $"{Rank} of {Suit}";//,{rank}, Globals.suitNames[(int)suit]);
+            return $"{Rank} of {Suit}";
         }
     }
 }
