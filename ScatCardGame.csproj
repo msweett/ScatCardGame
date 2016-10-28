@@ -49,6 +49,7 @@
     <Compile Include="DrawPile.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HandValue.cs" />
+    <Compile Include="HumanPlayer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Players.cs" />
     <Compile Include="Program.cs" />

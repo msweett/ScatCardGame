@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System;
+
 namespace ScatCardGame
 {
     public class Players
@@ -9,12 +11,13 @@ namespace ScatCardGame
         {
             for (int player = 0; player < numberOfPlayers; player++)
             {
-                players.Add(new Player());
+                players.Add(new HumanPlayer());
             }
 
             for (int AI = 0; AI < numberOfAI; AI++)
             {
                 players.Add(new AutomatedPlayer());
+                players[AI].isPlayerAI = true;
             }
         }
 
@@ -25,8 +28,8 @@ namespace ScatCardGame
 
         public Player getPlayer(int indexOfPlayer)
         {
+
             return players[indexOfPlayer];
         }
-
     }
 }

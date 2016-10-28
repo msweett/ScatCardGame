@@ -7,7 +7,7 @@ namespace ScatCardGame
         public Rank Rank { get; }
         public Suit Suit { get; }
 
-        public Card(int suit, int rank)
+        public Card(Suit suit, Rank rank)
         {
             if (!Enum.IsDefined(typeof(Suit), suit))
             {
@@ -19,8 +19,8 @@ namespace ScatCardGame
                 throw new System.ArgumentOutOfRangeException("Card rank is invalid, please chose a number between 1 and 13");
             }
 
-            Suit = (Suit)suit;
-            Rank = (Rank)rank;
+            Suit = suit;
+            Rank = rank;
         }
 
         public string getCardInfo()

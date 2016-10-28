@@ -24,6 +24,7 @@ namespace ScatCardGame
 
         public Card viewTopCard()
         {
+
             return cardPile.Peek();
         }
 

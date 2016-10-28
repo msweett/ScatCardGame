@@ -1,15 +1,30 @@
 ﻿namespace ScatCardGame
 {
-    class AutomatedPlayer : Player
+    public class AutomatedPlayer : Player
     { 
         public AutomatedPlayer()
         {
-            isPlayerAI = true;
+
+        }
+
+        public override void playDrawCardTurn(ref DrawPile drawPile, ref CardPile discardPile)
+        {
+
+        }
+
+        public override void playDiscardCardTurn(ref CardPile discardPile)
+        {
+
         }
 
         public Card calculateBestCardToDraw(Card cardOne, Card cardTwo)
         {
             return cardOne;
+        }
+
+        public void playTurn()
+        {
+
         }
 
         /*

@@ -7,14 +7,14 @@ namespace ScatCardGame
     {
         private static int WINNING_HAND_VALUE = 31;
         private static int MAX_CARDS_IN_HAND = 3;
-        private Dictionary<int, int> calculatedValue = new Dictionary<int, int>();
+        private Dictionary<Suit, int> calculatedValue = new Dictionary<Suit, int>();
 
         public HandValue()
         {
-            calculatedValue.Add(0, 0);   //hearts
-            calculatedValue.Add(1, 0);   //diamonds
-            calculatedValue.Add(2, 0);   //clubs
-            calculatedValue.Add(3, 0);   //spades
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+            {
+                calculatedValue.Add(suit, 0);
+            }
         }
 
         public Boolean isWinner(List<Card> cards)
@@ -23,7 +23,7 @@ namespace ScatCardGame
 
             if (cards.Count == MAX_CARDS_IN_HAND)
             {
-                for (int suit = 0; suit <= 3; suit++)
+                foreach (Suit suit in Enum.GetValues(typeof(Suit)))
                 {
                     if (calculatedValue[suit] == WINNING_HAND_VALUE)
                     {
@@ -40,21 +40,21 @@ namespace ScatCardGame
 
             foreach (Card card in cards)
             {
-                calculatedValue[(int)card.Suit] += (int)card.Rank;
+                calculatedValue[card.Suit] += (int)card.Rank;
             }
         }
 
-        public int suitValue(int suitIndex)
+        public int suitValue(Suit suit)
         {
-            return calculatedValue[suitIndex];
+            return calculatedValue[suit];
         }
 
         private void clearHandValues()
         {
-            calculatedValue[0] = 0;
-            calculatedValue[1] = 0;
-            calculatedValue[2] = 0;
-            calculatedValue[3] = 0;
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+            {
+                calculatedValue[suit] = 0;
+            }
         }
 
 

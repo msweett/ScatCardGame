@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ScatCardGame
 {
@@ -14,9 +15,9 @@ namespace ScatCardGame
         {
             clearCardPile();
 
-            for (int suit = (int)Suit.Hearts; suit < 4; suit++)
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
             {
-                for (int rank = 1; rank <= 13; rank++)
+                foreach (Rank rank in Enum.GetValues(typeof(Rank)))
                 {
                     Card c = new Card(suit, rank);
                     putCard(c);

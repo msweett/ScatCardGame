@@ -3,16 +3,19 @@ using System.Collections.Generic;
 
 namespace ScatCardGame
 {
-    public class Player
+    public abstract class Player
     {
         protected List<Card> playerHand = new List<Card>();
-        private HandValue handValue = new HandValue();
-        private Boolean isAI;
+        protected HandValue handValue = new HandValue();
+        protected Dictionary<int, Card> cardDisplayMap = new Dictionary<int, Card>();
+
+        public abstract void playDrawCardTurn(ref DrawPile drawPile, ref CardPile discardPile);
+        public abstract void playDiscardCardTurn(ref CardPile discardPile);
 
         public Player()
         {
 
-        }
+        }  
 
         public void addCard(Card card)
         {
@@ -34,9 +37,10 @@ namespace ScatCardGame
         public string suitValuesToString()
         {
             string suitValues = "";
-            for (int i = 0; i <= 3; i++)
-            {
-                suitValues += Globals.suitNames[i] + ": " + handValue.suitValue(i) + "\n";
+
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+            { 
+                suitValues += suit + ": " + handValue.suitValue(suit) + "\n";
             }
             return suitValues;
         }
@@ -45,10 +49,12 @@ namespace ScatCardGame
         {
             int selection = 0;
             string handInfo = "";
+            cardDisplayMap.Clear();
 
             foreach (Card card in playerHand)
             {
-                handInfo += "(" + selection + ")" + " " + card.getCardInfo() + "\n";
+                handInfo += "(" + selection + ") " + card.getCardInfo() + "\n";
+                cardDisplayMap.Add(selection, card);
                 selection++;
             }
             return handInfo;
@@ -57,12 +63,6 @@ namespace ScatCardGame
         public Boolean isWinningHand()
         {
             return handValue.isWinner(playerHand);
-        }
-
-        public Boolean isPlayerAI
-        {
-            get{ return isAI; }
-            set{ isAI = value; }
         }
     }
 }

@@ -9,14 +9,13 @@ namespace ScatCardGame
         {   
             DrawPile drawPile       = new DrawPile();
             CardPile discardPile    = new CardPile();
-            Players players         = new Players(Globals.NUM_OF_PLAYERS, Globals.NUM_OF_AI);
+            List<Player> players    = new List<Player>();
 
             drawPile.init();
             drawPile.shuffle();
 
-            for (int playerIndex = 0; playerIndex < Globals.NUM_OF_PLAYERS; playerIndex++)
-                for (int j = 0; j < Globals.MAX_CARDS_IN_HAND; j++)
-                    players.dealCard(playerIndex, drawPile.drawCard());
+            playersInit(ref players);
+            dealCards(ref players, ref drawPile);
             
             discardPile.putCard(drawPile.drawCard());
 
@@ -26,34 +25,14 @@ namespace ScatCardGame
             {
                 for (int playerIndex = 0; playerIndex < Globals.NUM_OF_PLAYERS; playerIndex++)
                 {
-                    Player player = players.getPlayer(playerIndex);
-                    
                     int playerDisplayNumber = playerIndex + 1;
+                    Player player = players[playerIndex];
 
-                    displayPlayerHand(playerDisplayNumber, player);
+                    displayHeader(playerDisplayNumber);
+                    player.playDrawCardTurn(ref drawPile, ref discardPile);
 
-                    Console.Write("\n(d) Draw a card\t(p) pick the {0} from the discard pile", discardPile.viewTopCard().getCardInfo());
-
-                    char cardPileToDrawFrom = cardPileToDrawFromInput();
-
-                    if (cardPileToDrawFrom == 'd')
-                    {
-                        player.addCard(drawPile.drawCard());
-                    }
-                    else if (cardPileToDrawFrom == 'p')
-                    {
-                        player.addCard(discardPile.drawCard());
-                    }
-
-                    displayPlayerHand(playerDisplayNumber, player);
-
-                    Console.Write("Which card would you like to discard: ");
-
-                    int indexOfCardToDiscard = cardToDiscardInput();
-                    discarCardFromHand(indexOfCardToDiscard, ref player, ref discardPile);
-
-                    displayPlayerHand(playerDisplayNumber, player);
-                    Console.WriteLine(player.suitValuesToString());
+                    displayHeader(playerDisplayNumber);
+                    player.playDiscardCardTurn(ref discardPile);
 
                     isGameOver = player.isWinningHand();
 
@@ -73,45 +52,31 @@ namespace ScatCardGame
             }
         }
 
-        public static int cardToDiscardInput()
-        {        
-            int inputAsInt;
-            ConsoleKeyInfo userSelection;
-
-            do
-            {
-                userSelection = Console.ReadKey();
-                inputAsInt = Convert.ToInt32(Char.GetNumericValue(userSelection.KeyChar));
-            } while (inputAsInt< 0 || inputAsInt >= 4);
-
-            return inputAsInt;
-        }
-
-        public static char cardPileToDrawFromInput()
-        {
-            char userSelection;
-
-            do
-            {
-                userSelection = Console.ReadKey().KeyChar;
-            } while (userSelection != 'd' && userSelection != 'p');
-
-            return userSelection;
-        }
-
-        public static void discarCardFromHand(int indexOfCard, ref Player player, ref CardPile discardPile)
-        {
-            Card cardToDiscard = player.getCard(indexOfCard);
-            player.removeCard(cardToDiscard);
-            discardPile.putCard(cardToDiscard);
-        }
-
-        public static void displayPlayerHand(int displayNumber, Player player)
+        public static void displayHeader(int displayNumber)
         {
             Console.Clear();
             Console.WriteLine("Player {0} turn", displayNumber);
             Console.WriteLine("Your cards are: \n");
-            Console.WriteLine(player.cardsToString());
+        }
+
+        public static void playersInit(ref List<Player> players)
+        {
+            for (int player = 0; player < Globals.NUM_OF_PLAYERS; player++)
+            {
+                players.Add(new HumanPlayer());
+            }
+
+            for (int AI = 0; AI < Globals.NUM_OF_AI; AI++)
+            {
+                players.Add(new AutomatedPlayer());
+            }
+        }
+
+        public static void dealCards(ref List<Player> players, ref DrawPile drawPile )
+        {
+            for (int playerIndex = 0; playerIndex < Globals.NUM_OF_PLAYERS; playerIndex++)
+                for (int j = 0; j < Globals.MAX_CARDS_IN_HAND; j++)
+                    players[playerIndex].addCard(drawPile.drawCard());
         }
     }
 }
