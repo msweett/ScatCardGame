@@ -61,7 +61,6 @@ namespace ScatCardGame
         {
             int indexOfCardToDiscard = findLowestCardNotInPursuingSuit();
 
-            //discard anything under 10, if nothing, anything that's not in best suit to purse list
             if (indexOfCardToDiscard == -1)
             {
                 indexOfCardToDiscard = findLowestCard();
@@ -81,7 +80,6 @@ namespace ScatCardGame
             {
                 int cardValue = handValue.getRankValue(card.rank);
 
-                //lowest card that is not in the dominemt suit
                 if ((card.suit != pursuingSuit) && (cardValue < previousCardValue))
                 {
                     indexOfCardToDiscard = counter;
@@ -103,7 +101,6 @@ namespace ScatCardGame
             {
                 int cardValue = handValue.getRankValue(card.rank);
 
-                //lowest card that is not in the dominemt suit
                 if (cardValue < previousCardValue)
                 {
                     indexOfCardToDiscard = counter;
