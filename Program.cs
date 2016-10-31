@@ -6,16 +6,18 @@ namespace ScatCardGame
     class Program
     {
         static void Main(string[] args)
-        {   
+        {
+            const int NUM_OF_PLAYERS = Globals.NUM_OF_AI + Globals.NUM_OF_HUMAN_PLAYERS;
+
             DrawPile drawPile       = new DrawPile();
             CardPile discardPile    = new CardPile();
             List<Player> players    = new List<Player>();
-
+            
             drawPile.init();
             drawPile.shuffle();
 
-            playersInit(ref players);
-            dealCards(ref players, ref drawPile);
+            initPlayers(ref players);
+            dealCards(ref players, ref drawPile, NUM_OF_PLAYERS);
             
             discardPile.putCard(drawPile.drawCard());
 
@@ -23,23 +25,17 @@ namespace ScatCardGame
             Boolean isGameOver = false;
             while (!isGameOver)
             {
-                for (int playerIndex = 0; playerIndex < Globals.NUM_OF_PLAYERS; playerIndex++)
+                for (int playerIndex = 0; playerIndex < NUM_OF_PLAYERS; playerIndex++)
                 {
-                    int playerDisplayNumber = playerIndex + 1;
                     Player player = players[playerIndex];
 
-                    displayHeader(playerDisplayNumber);
-                    player.playDrawCardTurn(ref drawPile, ref discardPile);
-
-                    displayHeader(playerDisplayNumber);
-                    player.playDiscardCardTurn(ref discardPile);
-
-                    isGameOver = player.isWinningHand();
+                    player.playTurn(ref drawPile, ref discardPile);
+                    isGameOver = player.hasWinningHand();
 
                     if (isGameOver)
                     {
                         Console.WriteLine("\nThe cake is a lie.");
-                        playerIndex = Globals.NUM_OF_PLAYERS;    //so we don't go to the next turn and reset isWinningHand
+                        break;
                     }
                     else
                     {
@@ -52,31 +48,31 @@ namespace ScatCardGame
             }
         }
 
-        public static void displayHeader(int displayNumber)
+        public static void initPlayers(ref List<Player> players)
         {
-            Console.Clear();
-            Console.WriteLine("Player {0} turn", displayNumber);
-            Console.WriteLine("Your cards are: \n");
-        }
-
-        public static void playersInit(ref List<Player> players)
-        {
-            for (int player = 0; player < Globals.NUM_OF_PLAYERS; player++)
+            int playerIndex = 1;
+            for (int player = 0; player < Globals.NUM_OF_HUMAN_PLAYERS; player++)
             {
-                players.Add(new HumanPlayer());
+                players.Add(new HumanPlayer(playerIndex));
+                playerIndex++;
             }
 
             for (int AI = 0; AI < Globals.NUM_OF_AI; AI++)
             {
-                players.Add(new AutomatedPlayer());
+                players.Add(new AutomatedPlayer(playerIndex));
+                playerIndex++;
             }
         }
 
-        public static void dealCards(ref List<Player> players, ref DrawPile drawPile )
+        public static void dealCards(ref List<Player> players, ref DrawPile drawPile, int NUM_OF_PLAYERS)
         {
-            for (int playerIndex = 0; playerIndex < Globals.NUM_OF_PLAYERS; playerIndex++)
+            for (int playerIndex = 0; playerIndex < NUM_OF_PLAYERS; playerIndex++)
+            {
                 for (int j = 0; j < Globals.MAX_CARDS_IN_HAND; j++)
+                {
                     players[playerIndex].addCard(drawPile.drawCard());
+                }
+            }
         }
     }
 }

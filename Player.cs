@@ -6,15 +6,16 @@ namespace ScatCardGame
     public abstract class Player
     {
         protected List<Card> playerHand = new List<Card>();
-        protected HandValue handValue = new HandValue();
-        protected Dictionary<int, Card> cardDisplayMap = new Dictionary<int, Card>();
+        protected HandValue handValue   = new HandValue();
 
-        public abstract void playDrawCardTurn(ref DrawPile drawPile, ref CardPile discardPile);
-        public abstract void playDiscardCardTurn(ref CardPile discardPile);
+        protected Dictionary<int, Card> cardDisplayMap = new Dictionary<int, Card>();
+        public int displayNumber;
+
+        public abstract void playTurn(ref DrawPile drawPile, ref CardPile discardPile);
 
         public Player()
         {
-
+            
         }  
 
         public void addCard(Card card)
@@ -29,12 +30,12 @@ namespace ScatCardGame
             handValue.calculateValue(playerHand);
         }
 
-        public Card getCard(int indexOfCard)
+        public Boolean hasWinningHand()
         {
-            return playerHand[indexOfCard];
+            return handValue.isWinner(playerHand);
         }
 
-        public string suitValuesToString()
+        protected string suitValuesToString()
         {
             string suitValues = "";
 
@@ -45,7 +46,7 @@ namespace ScatCardGame
             return suitValues;
         }
 
-        public string cardsToString()
+        protected string cardsToString()
         {
             int selection = 0;
             string handInfo = "";
@@ -60,9 +61,17 @@ namespace ScatCardGame
             return handInfo;
         }
 
-        public Boolean isWinningHand()
+        protected int playerDisplayNumber
         {
-            return handValue.isWinner(playerHand);
+            get { return displayNumber; }
+            set { displayNumber = value; }
+        }
+
+        protected void displayHeader()
+        {
+            Console.Clear();
+            Console.WriteLine("Player {0} turn", playerDisplayNumber);
+            Console.WriteLine("Your cards are: \n");
         }
     }
 }

@@ -9,12 +9,34 @@ namespace ScatCardGame
         private static int MAX_CARDS_IN_HAND = 3;
         private Dictionary<Suit, int> calculatedValue = new Dictionary<Suit, int>();
 
+        private static readonly Dictionary<Rank, int> rankToValue = new Dictionary<Rank, int>
+        {
+            { Rank.Ace, 11 },
+            { Rank.Two, 2 },
+            { Rank.Three, 3 },
+            { Rank.Four, 4 },
+            { Rank.Five, 5 },
+            { Rank.Six, 6 },
+            { Rank.Seven, 7 },
+            { Rank.Eight, 8 },
+            { Rank.Nine, 9 },
+            { Rank.Ten, 10 },
+            { Rank.Jack, 10 },
+            { Rank.Queen, 10 },
+            { Rank.King, 10 }
+        };
+        
         public HandValue()
         {
             foreach (Suit suit in Enum.GetValues(typeof(Suit)))
             {
                 calculatedValue.Add(suit, 0);
             }
+        }
+
+        public int getRankValue(Rank rank)
+        {
+            return rankToValue[rank];
         }
 
         public Boolean isWinner(List<Card> cards)
@@ -40,13 +62,18 @@ namespace ScatCardGame
 
             foreach (Card card in cards)
             {
-                calculatedValue[card.Suit] += (int)card.Rank;
+                calculatedValue[card.suit] += rankToValue[card.rank];
             }
         }
 
         public int suitValue(Suit suit)
         {
             return calculatedValue[suit];
+        }
+
+        public int getWinningHandValue()
+        {
+            return WINNING_HAND_VALUE;
         }
 
         private void clearHandValues()
@@ -56,24 +83,5 @@ namespace ScatCardGame
                 calculatedValue[suit] = 0;
             }
         }
-
-
-        /*
-        public int highestValuedSuit()
-        {
-            int highestValuedSuit = 0;
-
-            for (int i = 0; i <= 3; i++)
-            {
-                if ((calculatedValue[i] > highestValuedSuit) && ())
-                {
-                    //highestValuedSuit = calculatedValue[i];
-
-                }
-            }
-
-            return highestValuedSuit;
-        }
-        */
     }
 }

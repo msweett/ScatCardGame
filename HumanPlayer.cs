@@ -8,12 +8,21 @@ namespace ScatCardGame
 {
     public class HumanPlayer : Player
     {
-        public HumanPlayer()
+        public HumanPlayer(int displayNumber)
         {
-
+            this.displayNumber = displayNumber;
         }
 
-        public override void playDrawCardTurn(ref DrawPile drawPile, ref CardPile discardPile)
+        public override void playTurn(ref DrawPile drawPile, ref CardPile discardPile)
+        {
+            displayHeader();
+            playDrawCardTurn(ref drawPile, ref discardPile);
+
+            displayHeader();
+            playDiscardCardTurn(ref discardPile);
+        }
+
+        private void playDrawCardTurn(ref DrawPile drawPile, ref CardPile discardPile)
         {
             Console.WriteLine(cardsToString());
             Console.Write("\n(d) Draw a card\t(p) pick the {0} from the discard pile", discardPile.viewTopCard().getCardInfo());
@@ -29,7 +38,7 @@ namespace ScatCardGame
             }
         }
 
-        public override void playDiscardCardTurn(ref CardPile discardPile)
+        private void playDiscardCardTurn(ref CardPile discardPile)
         {
             Console.WriteLine(cardsToString());
             Console.Write("Which card would you like to discard: ");
