@@ -59,7 +59,7 @@ namespace ScatCardGame
 
             for (int AI = 0; AI < Globals.NUM_OF_AI; AI++)
             {
-                players.Add(new AutomatedPlayer(playerIndex));
+                players.Add(new AutomatedPlayer(playerIndex, new Easy()));
                 playerIndex++;
             }
         }

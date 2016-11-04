@@ -34,11 +34,6 @@ namespace ScatCardGame
             }
         }
 
-        public int getRankValue(Rank rank)
-        {
-            return rankToValue[rank];
-        }
-
         public Boolean isWinner(List<Card> cards)
         {
             Boolean isWinner = false;
@@ -62,7 +57,7 @@ namespace ScatCardGame
 
             foreach (Card card in cards)
             {
-                calculatedValue[card.suit] += rankToValue[card.rank];
+                calculatedValue[card.suit] += card.getRankValue();
             }
         }
 
@@ -83,5 +78,21 @@ namespace ScatCardGame
                 calculatedValue[suit] = 0;
             }
         }
+
+        public Suit highestValuedSuit()
+        {
+            Suit highestSuit = new Suit();
+
+            foreach (Suit suit in Enum.GetValues(typeof(Suit)))
+            {
+                if (calculatedValue[suit] > calculatedValue[highestSuit])
+                {
+                    highestSuit = suit;
+                }
+            }
+
+            return highestSuit;
+        }
+
     }
 }

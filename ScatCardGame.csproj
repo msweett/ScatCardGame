@@ -46,7 +46,9 @@
     <Compile Include="AutomatedPlayer.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="CardPile.cs" />
+    <Compile Include="Difficulty.cs" />
     <Compile Include="DrawPile.cs" />
+    <Compile Include="Easy.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HandValue.cs" />
     <Compile Include="HumanPlayer.cs" />

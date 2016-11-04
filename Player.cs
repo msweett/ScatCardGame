@@ -73,5 +73,19 @@ namespace ScatCardGame
             Console.WriteLine("Player {0} turn", playerDisplayNumber);
             Console.WriteLine("Your cards are: \n");
         }
+
+        private Card lowestCardForSuit(Suit suit)
+        {
+            Card lowestCard = new Card(suit, Rank.Ace);
+
+            foreach (Card card in playerHand)
+            {
+                if (card.rank < lowestCard.rank && card.suit == suit)
+                {
+                    lowestCard = card;
+                }
+            }
+            return lowestCard;
+        }
     }
 }

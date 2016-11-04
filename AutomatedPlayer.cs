@@ -6,8 +6,11 @@ namespace ScatCardGame
 {
     public class AutomatedPlayer : Player
     {
-        public AutomatedPlayer(int displayNumber)
+        public Difficulty difficulty;
+
+        public AutomatedPlayer(int displayNumber, Difficulty difficulty)
         {
+            this.difficulty = difficulty;
             this.displayNumber = displayNumber;
         }
 
@@ -25,9 +28,9 @@ namespace ScatCardGame
         private void playDrawCardTurn(ref DrawPile drawPile, ref CardPile discardPile)
         {
             Console.Write("\n(d) Draw a card\t(p) pick the {0} from the discard pile", discardPile.viewTopCard().getCardInfo());
-            Console.WriteLine("\nThe best suit to pursue is: " + calculateBestSuitToPursue());
+            //Console.WriteLine("\nThe best suit to pursue is: " + calculateBestSuitToPursue());
 
-            if (isDrawFromDiscardPileViable(discardPile))
+            if (difficulty.shouldWeDrawFromDiscardPile(discardPile, handValue, playerHand))
             {
                 Console.WriteLine("Drawing card from discard pile..");
                 addCard(discardPile.drawCard());
@@ -78,7 +81,7 @@ namespace ScatCardGame
 
             foreach (Card card in playerHand)
             {
-                int cardValue = handValue.getRankValue(card.rank);
+                int cardValue = card.getRankValue();
 
                 if ((card.suit != pursuingSuit) && (cardValue < previousCardValue))
                 {
@@ -99,7 +102,7 @@ namespace ScatCardGame
 
             foreach (Card card in playerHand)
             {
-                int cardValue = handValue.getRankValue(card.rank);
+                int cardValue = card.getRankValue();
 
                 if (cardValue < previousCardValue)
                 {
@@ -112,14 +115,9 @@ namespace ScatCardGame
             return indexOfCardToDiscard;
         }
 
-        private Card calculateBestCardToDraw(Card cardOne, Card cardTwo)
-        {
-            return cardOne;
-        }
-
         private Boolean isDrawFromDiscardPileViable(CardPile discardPile)
         {
-            int valueOfTopCard = handValue.getRankValue(discardPile.viewTopCard().rank);
+            int valueOfTopCard = discardPile.viewTopCard().getRankValue();
             Suit suitOfTopCard = discardPile.viewTopCard().suit;
             Suit suitToPursue = calculateBestSuitToPursue();
             Boolean isCardViable = false;
@@ -132,6 +130,24 @@ namespace ScatCardGame
             return isCardViable;
         }
 
+        private Suit calculateBestSuitToPursueWithDiscardPile()
+        {
+            List<Suit> suitsThatCanWin = getSuitsThatCanWin();
+
+            Suit bestSuit;
+            if (suitsThatCanWin.Count > 0)
+            {
+                bestSuit = findHighestValuedSuit(suitsThatCanWin);
+            }
+            else
+            {
+                IEnumerable<Suit> suits = Enum.GetValues(typeof(Suit)).Cast<Suit>();
+                bestSuit = findHighestValuedSuit(suits);
+            }
+
+            return bestSuit;
+        }
+        
         private Suit calculateBestSuitToPursue()
         {
             List<Suit> suitsThatCanWin = getSuitsThatCanWin();
@@ -183,9 +199,9 @@ namespace ScatCardGame
         
         private Boolean canSuitWin(Suit suit)
         {
-            List<Rank> cards = getCardsFromASpecificSuit(suit);
-            Rank maxRank = Rank.Ace;
-            int maxRankValue = handValue.getRankValue(maxRank);
+            List<Card> cards = getCardsFromASpecificSuit(suit);
+            Card maxCard = new Card(suit, Rank.Ace);
+            int maxRankValue = 11;
             int sumOfRanks = sumRanks(cards);
             int winningHandValue = handValue.getWinningHandValue();
 
@@ -194,7 +210,7 @@ namespace ScatCardGame
             Boolean suitCanWin = false;
             if (remainingValueUntilWinner <= maxRankValue)
             {
-                if ((remainingValueUntilWinner == maxRankValue) && (cards.Contains(maxRank)))
+                if ((remainingValueUntilWinner == maxRankValue) && (cards.Contains(maxCard)))
                 {
                     suitCanWin = false;
                 }
@@ -206,29 +222,29 @@ namespace ScatCardGame
             return suitCanWin;
         }
 
-        private int sumRanks(List<Rank> ranks)
+        private int sumRanks(List<Card> cards)
         {
             int sum = 0;
-            foreach (Rank i in ranks)
+            foreach (Card card in cards)
             {
-                sum += handValue.getRankValue(i);
+                sum += card.getRankValue();
             }
             return sum;
         }
 
-        private List<Rank> getCardsFromASpecificSuit(Suit suit)
+        private List<Card> getCardsFromASpecificSuit(Suit suit)
         {
-            List<Rank> ranks = new List<Rank>();
+            List<Card> cards = new List<Card>();
 
             foreach (Card card in playerHand)
             {
                 if (card.suit == suit)
                 {
-                    ranks.Add(card.rank);
+                    cards.Add(card);
                 }
             }
 
-            return ranks;
+            return cards;
         }
     }
 }
