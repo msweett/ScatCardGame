@@ -8,19 +8,22 @@ namespace ScatCardGame
 {
     public class Easy : Difficulty
     {
+        private Suit pursuingSuit;
+
         public override Boolean shouldWeDrawFromDiscardPile(CardPile discardPile, HandValue handValue, List<Card> playerHand)
         {
             Boolean drawFromDiscardPile = false;
-            Suit highestValuedSuit = handValue.highestValuedSuit();
             Card topOfDiscardPile = discardPile.viewTopCard();
 
+            calculateBestSuitToPursue(handValue);
+
             //if top of discard pile is not in the highest valued suit, draw from draw pile
-            if (topOfDiscardPile.suit == highestValuedSuit)
+            if (topOfDiscardPile.suit == pursuingSuit)
             {
-                //if hand contains 3 of the same highest valued suit, compare lowest valued card with top of discard pile, 
+                //if hand contains 3 of the same pursuing suit, compare lowest valued card with top of discard pile, 
                 //if it's higher, draw it, if not don't
-                if ((numberOfCardsInSuit(playerHand, highestValuedSuit) == 3 && lowestCardInSuit(playerHand, highestValuedSuit).rank < topOfDiscardPile.rank)
-                        || numberOfCardsInSuit(playerHand, highestValuedSuit) < 3)
+                if ((numberOfCardsInPursuingSuit(playerHand) == 3 && lowestCardInPursuingSuit(playerHand).rank < topOfDiscardPile.rank)
+                        || numberOfCardsInPursuingSuit(playerHand) < 3)
                 {
                     drawFromDiscardPile = true;
                 }
@@ -30,21 +33,16 @@ namespace ScatCardGame
         }
 
         
-        public override Card bestCardToDiscard(HandValue handValue, List<Card> playerHand)
+        public override Card cardToDiscard(List<Card> playerHand)
         {
-            //card that isn't in dominant suit
-                //if there are 2, pick the lowest card
-            
-            //isCardInSuit(handValue.highestValuedSuit);   
-            //lowest card in dominant suit 
-            int indexOfCardToDiscard = findLowestCardNotInPursuingSuit();
+            Card cardToDiscard = lowestCardNotInPursuingSuit(playerHand);
 
-            if (indexOfCardToDiscard == -1)
+            if (cardToDiscard == null)
             {
-                indexOfCardToDiscard = findLowestCard();
+                cardToDiscard = lowestCardInPursuingSuit(playerHand);
             }
 
-            return indexOfCardToDiscard;
+            return cardToDiscard;
         }
         
 
@@ -53,63 +51,17 @@ namespace ScatCardGame
             return true;
         }
 
-        private int findLowestCardNotInPursuingSuit(List<Card> playerHand, HandValue handValue)
+        private Card lowestCardNotInPursuingSuit(List<Card> playerHand)
         {
-            Suit pursuingSuit = handValue.highestValuedSuit(); 
+            int cardValue;
             int previousCardValue = 12;
-            int indexOfCardToDiscard = -1;
-            int counter = 0;
-
-            foreach (Card card in playerHand)
-            {
-                int cardValue = card.getRankValue();
-
-                if ((card.suit != pursuingSuit) && (cardValue < previousCardValue))
-                {
-                    indexOfCardToDiscard = counter;
-                    previousCardValue = cardValue;
-                }
-                counter++;
-            }
-
-            return indexOfCardToDiscard;
-        }
-
-        private Suit bestSuitToPursue(List<Card> playerHand, HandValue handValue)
-        {
-            Suit bestSuit;
-
-            //find highest value suit
-
-            bestSuit = handValue.highestValuedSuit();
-              
-            return bestSuit;
-        }
-
-        private Card lowestCardInSuit(List<Card> playerHand, Suit suit)
-        {
-            Card lowestCard = new Card(suit, Rank.Ace);
-
-            foreach (Card card in playerHand)
-            {
-                if (card.getRankValue() < lowestCard.getRankValue() && card.suit == suit)
-                {
-                    lowestCard = card;
-                }
-            }
-
-            return lowestCard;
-        }
-
-        private Card lowestCardNotInSuit(List<Card> playerHand, Suit suit)
-        {
-            int previousCardValue = (int)Rank.Ace;
             Card lowestCard = null;
 
             foreach (Card card in playerHand)
             {
-                int cardValue = card.getRankValue();
-                if (card.suit != suit && cardValue < previousCardValue)
+                cardValue = card.getRankValue();
+
+                if ((card.suit != pursuingSuit) && (cardValue < previousCardValue))
                 {
                     lowestCard = card;
                     previousCardValue = cardValue;
@@ -119,12 +71,36 @@ namespace ScatCardGame
             return lowestCard;
         }
 
-        private int numberOfCardsInSuit(List<Card> playerHand, Suit suit)
+        private void calculateBestSuitToPursue(HandValue handValue)
+        {
+            pursuingSuit = handValue.highestValuedSuit();
+        }
+
+        private Card lowestCardInPursuingSuit(List<Card> playerHand)
+        {
+            int cardValue;
+            int previousCardValue = 12;
+            Card lowestCard = null;
+
+            foreach (Card card in playerHand)
+            {
+                cardValue = card.getRankValue();
+                if (cardValue < previousCardValue && card.suit == pursuingSuit)
+                {
+                    lowestCard = card;
+                    previousCardValue = cardValue;
+                }
+            }
+
+            return lowestCard;
+        }
+
+        private int numberOfCardsInPursuingSuit(List<Card> playerHand)
         {
             int cardsInSuit = 0;
             foreach (Card card in playerHand)
             {
-                if (card.suit == suit)
+                if (card.suit == pursuingSuit)
                 {
                     cardsInSuit++;
                 }

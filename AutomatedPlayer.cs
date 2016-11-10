@@ -22,44 +22,44 @@ namespace ScatCardGame
 
             displayHeader();
             Console.WriteLine(cardsToString());
-            playDiscardCardTurn(ref discardPile);
+            playDiscardCardTurn(ref discardPile, playerHand);
         }
 
         private void playDrawCardTurn(ref DrawPile drawPile, ref CardPile discardPile)
         {
             Console.Write("\n(d) Draw a card\t(p) pick the {0} from the discard pile", discardPile.viewTopCard().getCardInfo());
-            //Console.WriteLine("\nThe best suit to pursue is: " + calculateBestSuitToPursue());
 
             if (difficulty.shouldWeDrawFromDiscardPile(discardPile, handValue, playerHand))
             {
-                Console.WriteLine("Drawing card from discard pile..");
+                Console.WriteLine("\nDrawing card from discard pile..");
                 addCard(discardPile.drawCard());
             }
 
             else
             {
-                Console.WriteLine("Drawing card from draw pile..");
+                Console.WriteLine("\nDrawing card from draw pile..");
                 addCard(drawPile.drawCard());
             }
 
             Console.ReadLine();
         }
 
-        private void playDiscardCardTurn(ref CardPile discardPile)
+        private void playDiscardCardTurn(ref CardPile discardPile, List<Card> playerHand)
         {
-            Console.WriteLine("Best suit: " + calculateBestSuitToPursue() + " The best card to discard is: " + cardToDiscard());
-            discardCard(ref discardPile);
+            Card cardToDiscard = difficulty.cardToDiscard(playerHand);
+            Console.WriteLine(" The best card to discard is: " + cardToDiscard.getCardInfo());
+            discardCard(ref discardPile, cardToDiscard);
             Console.ReadLine();
         }
 
-        private void discardCard(ref CardPile discardPile)
+        private void discardCard(ref CardPile discardPile, Card card)
         {
-            Card card = cardDisplayMap[cardToDiscard()];
-
             discardPile.putCard(card);
             removeCard(card);
         }
 
+        /*
+        Code for more complicated AI, don't have a class yet
         private int cardToDiscard()
         {
             int indexOfCardToDiscard = findLowestCardNotInPursuingSuit();
@@ -246,5 +246,6 @@ namespace ScatCardGame
 
             return cards;
         }
+        */
     }
 }
